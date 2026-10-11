@@ -57,6 +57,19 @@ The hardware target is a [Seeed Studio XIAO nRF52840](https://wiki.seeedstudio.c
 
 Flashing this tree produces a quiet board: LEDs off, button ignored, no advertising. Build instructions are in [firmware/README.md](firmware/README.md).
 
+## Work remaining
+
+| Issue | Feature |
+| --- | --- |
+| [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Rechargeable hardware: button, eight LEDs, cell |
+| [#2](https://github.com/FixerSchis/charge-counter/issues/2) | Single-press view, double-press subtract, hold-to-add |
+| [#3](https://github.com/FixerSchis/charge-counter/issues/3) | Count and max kept across power loss |
+| [#4](https://github.com/FixerSchis/charge-counter/issues/4) | Binary display on the eight LEDs |
+| [#5](https://github.com/FixerSchis/charge-counter/issues/5) | BLE advertising, count, max, and battery |
+| [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Sleep, and a measured battery life |
+| [#7](https://github.com/FixerSchis/charge-counter/issues/7) | Phone app that monitors several devices |
+| [#8](https://github.com/FixerSchis/charge-counter/issues/8) | Per-device max edited from the phone |
+
 ## License
 
 [MIT](LICENSE).
