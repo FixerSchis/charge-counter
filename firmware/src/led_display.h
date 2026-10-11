@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 
-// Eight external LEDs plus the onboard green LED.
-// Encoding is specified in docs/behavior.md. show() does not drive the
-// pattern yet; begin() and clear() force every LED off.
+// Eight red LEDs on the custom board, active high.
+// Encoding, including the opening flash, is in docs/behavior.md.
+// show() does not drive the pattern yet. begin() and clear() force every LED off.
 class LedDisplay {
  public:
   void begin();
@@ -15,9 +15,6 @@ class LedDisplay {
   uint16_t shown() const { return shown_; }
 
  private:
-  void writeActivity(bool on);
-  void writeCountersOff();
-
   bool on_ = false;
   uint16_t shown_ = 0;
 };

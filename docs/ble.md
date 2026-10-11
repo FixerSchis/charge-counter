@@ -2,7 +2,7 @@
 
 The device is a peripheral. The phone is a central. Several devices are several peripherals; each one stores its own count and max. This document is the contract both sides implement.
 
-SoftDevice S140 on the XIAO nRF52840. Custom service UUIDs are in `firmware/src/config.h`.
+SoftDevice S132 on the nRF52832 module. Custom service UUIDs are in `firmware/src/config.h`. The chip has no USB device; programming is the SWD pads in [docs/hardware.md](hardware.md).
 
 ## Identity
 

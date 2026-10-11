@@ -1,9 +1,10 @@
 #include "button_gestures.h"
 
-#include <Arduino.h>
+#include "board_gpio.h"
+#include "board_pins.h"
 
 void ButtonGestures::begin() {
-  pinMode(D8, INPUT_PULLUP);
+  board_pin_input_pullup(PIN_BUTTON);
   busy_ = false;
 }
 

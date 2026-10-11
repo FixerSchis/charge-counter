@@ -10,6 +10,7 @@ static constexpr uint32_t PRESS_GAP_MS = 400;
 static constexpr uint32_t LONG_PRESS_MS = 600;
 static constexpr uint32_t ADD_REPEAT_MS = 400;
 static constexpr uint32_t DISPLAY_MS = 2500;
+static constexpr uint32_t ACK_FLASH_MS = 150;
 
 static constexpr uint16_t COUNT_HARD_CAP = 255;
 static constexpr uint16_t DEFAULT_MAX = 8;

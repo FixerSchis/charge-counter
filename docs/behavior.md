@@ -49,18 +49,20 @@ The firmware flushes flash when a gesture goes from busy to idle, so a long hold
 
 ## LED encoding
 
-External LEDs are wired active high. D0 is bit 0 (value 1). D7 is bit 7 (value 128).
+Eight LEDs, active high. P0.02 is bit 0 (value 1). P0.11 is bit 7 (value 128). The pin table is in [docs/hardware.md](hardware.md).
 
-| Count | LEDs |
+Every reading starts with all eight LEDs on for `ACK_FLASH_MS` (150 ms), then the binary value for the rest of the display time. That flash is how a count of zero is visible: the lamps blink, then stay dark. Asleep, before any reading, the lamps never flash.
+
+| Count | After the flash |
 | --- | --- |
-| 0 | D0–D7 off |
-| 1 | D0 |
-| 5 | D0 and D2 |
-| 255 | D0–D7 |
+| 0 | All off |
+| 1 | P0.02 |
+| 5 | P0.02 and P0.04 |
+| 255 | All eight |
 
-The onboard green LED (`LED_GREEN` on the Adafruit core, pin 13, P0.30) is the "reading is visible" lamp. It follows `LED_STATE_ON` from the board package. It is lit for every reading, including zero, and it is off when the display is asleep. Asleep and "showing zero" are different.
+The charge LED is driven by the charger from USB power. It is not part of this pattern.
 
-The reading stays up for `DISPLAY_MS` (2500 ms) after the last view or count change, then every LED turns off. A gesture that is still busy holds the reading past that timeout. Each new add or subtract restarts the 2500 ms.
+The reading stays up for `DISPLAY_MS` (2500 ms) after the last view or count change, measured from the start of the flash, then every count LED turns off. A gesture that is still busy holds the reading past that timeout. Each new add or subtract restarts the flash and the 2500 ms.
 
 ## Scenarios
 
@@ -71,7 +73,7 @@ The reading stays up for `DISPLAY_MS` (2500 ms) after the last view or count cha
 | 3 | Two presses, then a third inside the next gap | 5 | 3 | Binary 3, then off |
 | 4 | Hold past the long-press time and release | 5 | 6 | Binary 6 from the moment of the add |
 | 5 | Keep holding | 6 | 7, then 8, until max | Updates on each add |
-| 6 | Subtract at 0 | 0 | 0 | Green LED only |
+| 6 | Subtract at 0 | 0 | 0 | All eight flash, then dark |
 | 7 | Add at max | max | max | Binary max |
 | 8 | Remove power and restore it | 4 | 4 | Dark until the next view |
 

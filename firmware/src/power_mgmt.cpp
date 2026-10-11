@@ -3,9 +3,7 @@
 #include <Arduino.h>
 
 void PowerMgmt::begin() {
-  // Leave PIN_CHARGING_CURRENT (Arduino pin 22, P0.13) untouched.
-  // High-impedance selects the board's ~50 mA charge current.
-  // Driving the pin changes that current. See docs/hardware.md.
+  // Charge current is set by the PROG resistor on the PCB, not by a GPIO.
 }
 
 void PowerMgmt::idle() {

@@ -14,7 +14,7 @@ The behavior, wiring, radio contract, and power policy are specified. The firmwa
 
 The number stays inside 0 and the device's max. Max is an integer from 1 to 255, stored on the device, and changed from the phone. The full timing and edge cases are in [docs/behavior.md](docs/behavior.md).
 
-The eight LEDs show the number in binary, least significant bit on D0. The onboard green LED lights for the whole time a reading is visible, including a reading of zero, so a dark counter is different from a counter showing 0.
+The eight LEDs show the number in binary, least significant bit on P0.02. Each reading starts with a short flash of all eight, so a count of zero is visible and then goes dark.
 
 ## How the pieces fit
 
@@ -36,13 +36,14 @@ The phone is a central. Each device is its own peripheral with its own count and
 | Path | Contents |
 | --- | --- |
 | [docs/behavior.md](docs/behavior.md) | Button state machine, LED encoding, flash record |
-| [docs/hardware.md](docs/hardware.md) | Board, wiring, charging, bill of materials |
+| [docs/hardware.md](docs/hardware.md) | Custom PCB, charging, and assembly rules |
+| [hardware/bom.csv](hardware/bom.csv) | JLCPCB part numbers |
 | [docs/ble.md](docs/ble.md) | Advertising and GATT contract |
 | [docs/power.md](docs/power.md) | Sleep and battery-life policy |
-| [firmware/](firmware/) | PlatformIO project for the XIAO nRF52840 |
+| [firmware/](firmware/) | PlatformIO project for the nRF52832 module |
 | [app/](app/) | Phone app contract |
 
-The hardware target is a [Seeed Studio XIAO nRF52840](https://wiki.seeedstudio.com/XIAO_BLE/) (not the Sense). It has a Nordic nRF52840, a BQ25101 charger, and enough pins for one button and eight LEDs.
+The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). It is laid out for JLCPCB Economic assembly: one side, SMT only, and basic-library parts everywhere a basic part exists. The module, charger, USB-C socket, and button are the extended lines.
 
 ## Firmware status
 
@@ -50,8 +51,8 @@ The hardware target is a [Seeed Studio XIAO nRF52840](https://wiki.seeedstudio.c
 | --- | --- |
 | `main.cpp` | Connects gestures, storage, LEDs, BLE, and sleep |
 | `counter_store` | RAM clamping for add, subtract, and set-max |
-| `button_gestures` | Button pin is an input. Recognition is unimplemented |
-| `led_display` | Pins are driven off. Binary pattern is unimplemented |
+| `button_gestures` | Button pin is an input pull-up. Recognition is unimplemented |
+| `led_display` | Count LEDs are driven off. Binary pattern is unimplemented |
 | `ble_link` | Callback slot only. Radio is unimplemented |
 | `power_mgmt` | Yields the CPU. Sleep is unimplemented |
 
@@ -61,7 +62,7 @@ Flashing this tree produces a quiet board: LEDs off, button ignored, no advertis
 
 | Issue | Feature |
 | --- | --- |
-| [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Rechargeable hardware: button, eight LEDs, cell |
+| [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Custom PCB laid out for cheap SMT assembly |
 | [#2](https://github.com/FixerSchis/charge-counter/issues/2) | Single-press view, double-press subtract, hold-to-add |
 | [#3](https://github.com/FixerSchis/charge-counter/issues/3) | Count and max kept across power loss |
 | [#4](https://github.com/FixerSchis/charge-counter/issues/4) | Binary display on the eight LEDs |
