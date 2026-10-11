@@ -43,7 +43,7 @@ The phone is a central. Each device is its own peripheral with its own count and
 | [firmware/](firmware/) | PlatformIO project for the nRF52832 module |
 | [app/](app/) | Phone app contract |
 
-The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). It is laid out for JLCPCB Economic assembly: one side, SMT only, and basic-library parts everywhere a basic part exists. The module, charger, USB-C socket, and button are the extended lines.
+The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). Firmware loads over USB-C through a CH340C that is only powered while the cable is plugged in. JLCPCB Economic assembly places one side. The USB-C socket and the button are hand soldered. The machine-placed extended parts are the module, the charger, and the CH340C.
 
 ## Firmware status
 

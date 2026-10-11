@@ -1,14 +1,15 @@
-Qty,LCSC,MPN,Value,Library,Function
-1,C411306,E73-2G4M04S1B,nRF52832 module,Extended,BLE module with onboard antenna
-1,C16581,TP4056-42-ESOP8,Li-ion charger,Extended,USB charge of one cell
-1,C165948,TYPE-C-31-M-12,USB-C receptacle,Extended,5 V input only
-1,C10852,4x4x1.7 mm tactile,SPST,Extended,User button. Swap for a Preferred Extended tactile if one is in stock
-1,C5446,XC6206P332MR-G,3.3 V LDO,Basic,Module supply from the cell
-1,C8545,2N7002,N-MOSFET,Basic,Disconnects the battery divider
-9,C2286,KT-0603R,Red LED,Basic,Eight count LEDs plus the charge LED
-9,C22843,0603WAF1501T5E,1.5 kΩ,Basic,LED series resistors
-2,C23186,0603WAF5101T5E,5.1 kΩ,Basic,USB-C CC pulldowns
-1,C25804,0603WAF1002T5E,10 kΩ,Basic,TP4056 PROG, about 110 mA
-2,C22935,0603WAF1004T5E,1 MΩ,Basic,Battery divider
-4,C19702,CL10A106KP8NNNC,10 µF 10 V,Basic,VBUS, BAT, LDO output, module VCC
-4,C14663,CC0603KRX7R9BB104,100 nF,Basic,High-frequency decoupling
+Place,Qty,LCSC,MPN,Value,Library,Function
+Machine,1,C411306,E73-2G4M04S1B,nRF52832 module,Extended,BLE module. Serial bootloader pins go to the CH340
+Machine,1,C16581,TP4056-42-ESOP8,Li-ion charger,Extended,USB charge of one cell
+Machine,1,C84681,CH340C,USB-UART,Extended,Programming over USB-C. Powered from VBUS only
+Machine,1,C5446,XC6206P332MR-G,3.3 V LDO,Basic,Module supply from the cell
+Machine,1,C8545,2N7002,N-MOSFET,Basic,Disconnects the battery divider
+Machine,9,C2286,KT-0603R,Red LED,Basic,Eight count LEDs plus the charge LED
+Machine,9,C22843,0603WAF1501T5E,1.5 kΩ,Basic,LED series resistors
+Machine,2,C23186,0603WAF5101T5E,5.1 kΩ,Basic,USB-C CC pulldowns
+Machine,4,C25804,0603WAF1002T5E,10 kΩ,Basic,PROG about 110 mA; reset pull-up; VBUS divider
+Machine,2,C22935,0603WAF1004T5E,1 MΩ,Basic,Battery divider
+Machine,4,C19702,CL10A106KP8NNNC,10 µF 10 V,Basic,VBUS, BAT, LDO output, module VCC
+Machine,6,C14663,CC0603KRX7R9BB104,100 nF,Basic,Decoupling, CH340 V3, DTR-to-reset
+Hand,1,C165948,TYPE-C-31-M-12,USB-C receptacle,Extended,Charge and programming. Not placed by the fab
+Hand,1,C10852,4x4x1.7 mm tactile,SPST,Extended,User button. Not placed by the fab

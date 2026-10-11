@@ -12,7 +12,7 @@ Use system-on sleep with the SoftDevice still scheduled. System OFF stops advert
 
 `PowerMgmt::idle()` returns on a button edge or a SoftDevice event. `BleLink::poll()` runs before each wait. A connected phone is not a reason to stay awake between connection events.
 
-P0.14 stays low while the divider is not being sampled, so the two 1 MΩ resistors are not a permanent load. Debug logging stays out of the field firmware.
+P0.14 stays low while the divider is not being sampled, so the two 1 MΩ resistors are not a permanent load. While P0.17 reads low (USB unplugged), P0.12 and P0.15 stay disconnected inputs with no pull, so the unpowered CH340 cannot draw from the cell. Debug logging stays out of the field firmware. The serial bootloader may use that UART, because it only runs while USB is plugged in.
 
 Charge current is the PROG resistor, about 110 mA with 10 kΩ. Firmware does not change it.
 
