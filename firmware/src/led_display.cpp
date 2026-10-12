@@ -13,9 +13,8 @@ void LedDisplay::show(uint16_t count) {
 }
 
 void LedDisplay::clear() {
-  for (uint8_t pin : PIN_LED_BIT) {
-    board_pin_output_low(pin);
-  }
+  board_pin_output_low(PIN_LED_DATA);
+  board_pin_output_low(PIN_LED_EN);
   on_ = false;
   shown_ = 0;
 }

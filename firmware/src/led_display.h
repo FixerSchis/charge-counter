@@ -2,9 +2,8 @@
 
 #include <stdint.h>
 
-// Eight red LEDs on the custom board, active high.
-// Encoding, including the opening flash, is in docs/behavior.md.
-// show() does not drive the pattern yet. begin() and clear() force every LED off.
+// Eight addressable RGB lamps. Encoding is in docs/behavior.md.
+// show() does not send a frame yet. begin() and clear() leave the chain unpowered.
 class LedDisplay {
  public:
   void begin();

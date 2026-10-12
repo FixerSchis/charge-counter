@@ -1,6 +1,6 @@
 # Power
 
-The device has to stay reachable from a phone and still run for a long time on a small cell. The idle load is the radio, the XC6206 (about 1 µA), and the TP4056's sleep drain (under 3 µA with USB unplugged). The eight count LEDs are off except during a reading. The charge LED is powered from USB, so it is dark when the device is on the cell alone.
+The device has to stay reachable from a phone and still run for a long time on a small cell. The idle load is the radio, the XC6206 (about 1 µA), and the TP4056's sleep drain (under 3 µA with USB unplugged). The eight count lamps are an addressable chain on a switched cell rail, so their standby current is disconnected except during a reading. Left connected, each one would draw about 0.5 mA while dark. The charge LED is powered from USB, so it is dark when the device is on the cell alone.
 
 The supply circuit is in [docs/hardware.md](hardware.md). Module VCC is the LDO output, never the cell.
 

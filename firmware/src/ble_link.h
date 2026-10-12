@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-// BLE peripheral. The GATT layout, advertising payload, and write rules
-// are in docs/ble.md. None of that is implemented yet.
+// BLE peripheral. The GATT layout, bonding rules, and write rules are in
+// docs/ble.md. None of that is implemented yet.
 class BleLink {
  public:
   // Return false to reject the write (out of range or wrong length is
