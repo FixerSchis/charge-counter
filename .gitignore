@@ -12,3 +12,11 @@
 *.hex
 .clangd
 compile_commands.json
+
+# KiCad local files
+hardware/kicad/.easyeda_cache/
+hardware/kicad/.history/
+hardware/kicad/*-backups/
+hardware/kicad/fp-info-cache
+hardware/kicad/~*.lck
+hardware/kicad/*.kicad_prl

@@ -17,7 +17,7 @@ The device is the source of truth. The phone caches the last value it saw so the
 
 ## Gestures
 
-One momentary button, active low.
+One momentary button, active low. An external normally open switch may be wired in parallel through J4. The recognizer sees one input: either switch, or both together, is the button.
 
 A press shorter than `LONG_PRESS_MS` (600 ms) is a short press. The recognizer waits `PRESS_GAP_MS` (400 ms) after that press is released before deciding what it was.
 

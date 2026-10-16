@@ -12,7 +12,7 @@
 static constexpr uint8_t PIN_LED_DATA = 2;  // P0.02
 static constexpr uint8_t PIN_LED_EN = 16;   // P0.16, high turns the chain on
 
-static constexpr uint8_t PIN_BUTTON = 13;      // P0.13, active low
+static constexpr uint8_t PIN_BUTTON = 13;      // P0.13, active low. On-board switch and J4 are in parallel
 static constexpr uint8_t PIN_VBAT_EN = 14;     // P0.14, high enables the divider
 static constexpr uint8_t PIN_VBAT_AIN = 28;    // P0.28 / AIN4
 static constexpr uint8_t PIN_UART_TX = 12;     // P0.12 to CH340 RXD
