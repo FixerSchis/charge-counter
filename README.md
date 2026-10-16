@@ -2,7 +2,7 @@
 
 A small rechargeable counter. One button, eight LEDs, and a number from 0 to a per-device maximum that survives power loss. A phone app talks to any number of these devices over Bluetooth Low Energy and can read each count or set each device's maximum.
 
-The behavior, wiring, radio contract, and power policy are specified. The firmware implements those contracts. The phone app is not in the tree yet.
+The behavior, wiring, radio contract, and power policy are specified. The firmware implements those contracts. The phone app in [app/](app/) lists the counters that phone has bonded and edits each name and max.
 
 ## What the button does
 
@@ -44,7 +44,7 @@ The phone is a central. Each device is its own peripheral with its own count, ma
 | [docs/ble.md](docs/ble.md) | Advertising and GATT contract |
 | [docs/power.md](docs/power.md) | Sleep and battery-life policy |
 | [firmware/](firmware/) | PlatformIO project for the nRF52832 module |
-| [app/](app/) | Phone app contract |
+| [app/](app/) | Flutter app for bonded counters |
 
 The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). Firmware loads over USB-C through a CH340C that is only powered while the cable is plugged in. JLCPCB Economic assembly places one side. The USB-C socket, the button, the cell socket, and the external-button socket are hand soldered. The machine-placed extended parts are the module, the charger, the CH340C, and the eight addressable lamps (one feeder).
 
