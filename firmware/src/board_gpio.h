@@ -7,5 +7,6 @@
 
 void board_pin_output_low(uint8_t pin);
 void board_pin_input_pullup(uint8_t pin);
+void board_pin_input_nopull(uint8_t pin);
 void board_pin_write(uint8_t pin, bool high);
 bool board_pin_read(uint8_t pin);

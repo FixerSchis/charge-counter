@@ -11,6 +11,10 @@ void board_pin_input_pullup(uint8_t pin) {
   nrf_gpio_cfg_input(pin, NRF_GPIO_PIN_PULLUP);
 }
 
+void board_pin_input_nopull(uint8_t pin) {
+  nrf_gpio_cfg_input(pin, NRF_GPIO_PIN_NOPULL);
+}
+
 void board_pin_write(uint8_t pin, bool high) {
   if (high) {
     nrf_gpio_pin_set(pin);
