@@ -14,7 +14,7 @@ pio device monitor
 
 Day-to-day upload is USB-C. The CH340C turns that into UART on P0.12 (TX) and P0.15 (RX) at 115200, and DTR resets the module through P0.21. The serial bootloader has to be built for those pins. SWD pads are for the first bootloader flash and for recovery. See [docs/hardware.md](../docs/hardware.md).
 
-The current sources recognize button gestures, write `/counter.bin`, and show the count on the lamps. They do not advertise. `loop()` calls `delay(50)` while idle so the board does not spin at full speed if this tree is flashed as-is.
+The current sources recognize gestures, write `/counter.bin`, show the count, and advertise. `loop()` calls `delay(50)` while idle so the board does not spin at full speed if this tree is flashed as-is.
 
 ## Modules
 
@@ -27,7 +27,7 @@ The current sources recognize button gestures, write `/counter.bin`, and show th
 | `src/counter_store.*` | Range rules in RAM. `begin()` / `commit()` use `/counter.bin` with CRC-16 |
 | `src/button_gestures.*` | View, subtract chain, hold-to-add, and hold-at-max pairing |
 | `src/led_display.*` | Blue ACK flash, red-then-green count, pairing blink, locate chase |
-| `src/ble_link.*` | Holds the max-write callback. No radio yet |
+| `src/ble_link.*` | Advertising, GATT, bonding window, battery sample |
 | `src/power_mgmt.*` | `idle()` is a short delay |
 
 Specs: [behavior](../docs/behavior.md), [hardware](../docs/hardware.md), [BLE](../docs/ble.md), [power](../docs/power.md).

@@ -2,7 +2,7 @@
 
 A small rechargeable counter. One button, eight LEDs, and a number from 0 to a per-device maximum that survives power loss. A phone app talks to any number of these devices over Bluetooth Low Energy and can read each count or set each device's maximum.
 
-The behavior, wiring, radio contract, and power policy are specified. The firmware builds around those contracts. Gesture recognition, the LED pattern, flash storage, BLE, sleep, and the phone app are tracked as GitHub issues and are not implemented yet.
+The behavior, wiring, radio contract, and power policy are specified. The firmware implements gestures, storage, the lamp pattern, and BLE. Sleep and the phone app are still open.
 
 ## What the button does
 
@@ -56,17 +56,16 @@ The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF5283
 | `counter_store` | RAM clamping plus `/counter.bin` load and commit |
 | `button_gestures` | View, subtract chain, hold-to-add, hold-at-max pairing |
 | `led_display` | Blue ACK flash, red-then-green count, pairing blink, locate |
-| `ble_link` | Callback slot only. Radio is unimplemented |
+| `ble_link` | Advertising, GATT, bonding window, battery sample |
 | `power_mgmt` | Yields the CPU. Sleep is unimplemented |
 
-Flashing this tree recognizes button gestures, keeps count, max, and name across power loss, and shows the count on the lamps. Nothing is advertised yet. Build instructions are in [firmware/README.md](firmware/README.md).
+Build instructions are in [firmware/README.md](firmware/README.md). Sleep is still a short delay.
 
 ## Work remaining
 
 | Issue | Feature |
 | --- | --- |
 | [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Custom PCB laid out for cheap SMT assembly |
-| [#5](https://github.com/FixerSchis/charge-counter/issues/5) | BLE advertising, count, max, and battery |
 | [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Sleep, and a measured battery life |
 | [#7](https://github.com/FixerSchis/charge-counter/issues/7) | Phone app that monitors several devices |
 | [#8](https://github.com/FixerSchis/charge-counter/issues/8) | Per-device max edited from the phone |
