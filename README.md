@@ -53,18 +53,17 @@ The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF5283
 | `main.cpp` | Connects gestures, storage, LEDs, BLE, and sleep |
 | `counter_store` | RAM clamping plus `/counter.bin` load and commit |
 | `button_gestures` | View, subtract chain, hold-to-add, hold-at-max pairing |
-| `led_display` | Count lamps are driven off. The red-then-green pattern is unimplemented |
+| `led_display` | Blue ACK flash, red-then-green count, pairing blink, locate |
 | `ble_link` | Callback slot only. Radio is unimplemented |
 | `power_mgmt` | Yields the CPU. Sleep is unimplemented |
 
-Flashing this tree recognizes button gestures and keeps count, max, and name across power loss. The lamps stay off and nothing is advertised yet. Build instructions are in [firmware/README.md](firmware/README.md).
+Flashing this tree recognizes button gestures, keeps count, max, and name across power loss, and shows the count on the lamps. Nothing is advertised yet. Build instructions are in [firmware/README.md](firmware/README.md).
 
 ## Work remaining
 
 | Issue | Feature |
 | --- | --- |
 | [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Custom PCB laid out for cheap SMT assembly |
-| [#4](https://github.com/FixerSchis/charge-counter/issues/4) | Red-then-green count on the eight RGB lamps |
 | [#5](https://github.com/FixerSchis/charge-counter/issues/5) | BLE advertising, count, max, and battery |
 | [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Sleep, and a measured battery life |
 | [#7](https://github.com/FixerSchis/charge-counter/issues/7) | Phone app that monitors several devices |
