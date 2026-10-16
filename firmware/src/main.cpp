@@ -103,13 +103,16 @@ void loop() {
   }
   gestureWasBusy = busy;
 
-  if (display.isOn() && !busy && (uint32_t)(now - displayStartedMs) >= DISPLAY_MS) {
+  display.poll(now);
+
+  if (display.isOn() && !busy && !display.isAnimating() &&
+      (uint32_t)(now - displayStartedMs) >= DISPLAY_MS) {
     display.clear();
   }
 
   ble.poll();
 
-  if (!busy && !display.isOn() && ble.canSleep()) {
+  if (!busy && !display.isOn() && !display.isAnimating() && ble.canSleep()) {
     power.idle();
   }
 }
