@@ -54,19 +54,18 @@ The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF5283
 | --- | --- |
 | `main.cpp` | Connects gestures, storage, LEDs, BLE, and sleep |
 | `counter_store` | RAM clamping for add, subtract, and set-max |
-| `button_gestures` | Button pin is an input pull-up. Recognition is unimplemented |
+| `button_gestures` | View, subtract chain, hold-to-add, hold-at-max pairing |
 | `led_display` | Count lamps are driven off. The red-then-green pattern is unimplemented |
 | `ble_link` | Callback slot only. Radio is unimplemented |
 | `power_mgmt` | Yields the CPU. Sleep is unimplemented |
 
-Flashing this tree produces a quiet board: LEDs off, button ignored, no advertising. Build instructions are in [firmware/README.md](firmware/README.md).
+Flashing this tree recognizes button gestures. The lamps stay off, nothing is advertised, and flash is not written yet. Build instructions are in [firmware/README.md](firmware/README.md).
 
 ## Work remaining
 
 | Issue | Feature |
 | --- | --- |
 | [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Custom PCB laid out for cheap SMT assembly |
-| [#2](https://github.com/FixerSchis/charge-counter/issues/2) | Single-press view, double-press subtract, hold-to-add |
 | [#3](https://github.com/FixerSchis/charge-counter/issues/3) | Count and max kept across power loss |
 | [#4](https://github.com/FixerSchis/charge-counter/issues/4) | Red-then-green count on the eight RGB lamps |
 | [#5](https://github.com/FixerSchis/charge-counter/issues/5) | BLE advertising, count, max, and battery |

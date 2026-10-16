@@ -16,6 +16,10 @@ static PowerMgmt power;
 static uint32_t displayStartedMs = 0;
 static bool gestureWasBusy = false;
 
+static void syncAtMax() {
+  gestures.setAtMax(store.count() >= store.maximum());
+}
+
 static void noteShown(uint32_t nowMs) {
   display.show(store.count());
   displayStartedMs = nowMs;
@@ -39,6 +43,7 @@ static bool handleMaxWrite(uint16_t requested) {
   if (store.maximum() != previousMax || store.count() != previousCount) {
     store.commit();
   }
+  syncAtMax();
   return true;
 }
 
@@ -51,13 +56,24 @@ static void handleGesture(GestureEvent event, uint32_t nowMs) {
       if (store.subtractOne()) {
         ble.notifyCount(store.count());
       }
+      syncAtMax();
       noteShown(nowMs);
       break;
     case GestureEvent::AddOne:
       if (store.addOne()) {
         ble.notifyCount(store.count());
       }
+      syncAtMax();
       noteShown(nowMs);
+      break;
+    case GestureEvent::OpenPairing:
+      // The radio window and the blue blink land with advertising.
+      store.commit();
+      break;
+    case GestureEvent::CancelPairing:
+      gestures.endPairing();
+      break;
+    case GestureEvent::ForgetBonds:
       break;
     case GestureEvent::None:
       break;
@@ -68,6 +84,8 @@ void setup() {
   store.begin();
   display.begin();
   gestures.begin();
+  syncAtMax();
+
   ble.onMaxWrite(handleMaxWrite);
   ble.begin(MODEL_NAME);
   power.begin();
