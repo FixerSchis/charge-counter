@@ -1,6 +1,6 @@
 # Phone app
 
-One app monitors the Charge Counters this phone has bonded with, and edits each of those devices' max and name. Counters bonded to someone else's phone are not listed and cannot be read or changed from here. The radio contract is [docs/ble.md](../docs/ble.md). The app is not in the tree yet.
+One app monitors the Charge Counters this phone has bonded with, and edits each of those devices' max and name. Counters bonded to someone else's phone are not listed and cannot be read or changed from here. The radio contract is [docs/ble.md](../docs/ble.md).
 
 ## Stack
 
@@ -19,6 +19,18 @@ Flutter, with `flutter_blue_plus`, so iOS and Android share one codebase and one
 **Max editor.** A value from 1 to 16 for this device. Save writes the Max characteristic. The screen then shows whatever the device reports. A rejected write stays on the editor with the failure visible. Saving on one device does not write to another.
 
 The phone stores the cache (address, name, last count, last max, last battery, last seen). The device is the source of truth for the count, the max, and the name. After a reconnect, the read values replace the cache.
+
+## Building
+
+The Flutter project in this directory is that app. `flutter_blue_plus` 2.3.14 is pinned. That plugin is free for personal and hobby use; a for-profit organization needs its commercial license.
+
+```
+cd app
+flutter pub get
+flutter run
+```
+
+Android and iOS only. The first launch explains Bluetooth access, then the system prompt appears. Android 11 and older also ask for location permission, which the scan requires and the app does not use as a location. Removing a counter drops the Android bond, then the row. iOS does not let an app delete the system pairing, so the remove dialog also points at Settings → Bluetooth.
 
 ## Permissions
 
