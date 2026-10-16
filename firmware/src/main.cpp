@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <string.h>
 
 #include "ble_link.h"
 #include "button_gestures.h"
@@ -47,11 +48,39 @@ static bool handleMaxWrite(uint16_t requested) {
   return true;
 }
 
+static bool handleNameWrite(const uint8_t* bytes, uint8_t length) {
+  const uint8_t previousLen = store.nameLength();
+  char previous[NAME_MAX_BYTES + 1];
+  memcpy(previous, store.name(), previousLen);
+  previous[previousLen] = '\0';
+
+  if (!store.setName(bytes, length)) {
+    return false;
+  }
+
+  if (store.nameLength() != previousLen ||
+      memcmp(store.name(), previous, store.nameLength()) != 0) {
+    ble.notifyName(store.name(), store.nameLength());
+    store.commit();
+  }
+  return true;
+}
+
+static void handleLocate() {
+  display.startLocate();
+}
+
+static void handlePairingClosed() {
+  display.stopPairingBlink();
+  gestures.endPairing();
+}
+
 static void handleGesture(GestureEvent event, uint32_t nowMs) {
   switch (event) {
     case GestureEvent::View:
       noteShown(nowMs);
       break;
+
     case GestureEvent::SubtractOne:
       if (store.subtractOne()) {
         ble.notifyCount(store.count());
@@ -59,6 +88,7 @@ static void handleGesture(GestureEvent event, uint32_t nowMs) {
       syncAtMax();
       noteShown(nowMs);
       break;
+
     case GestureEvent::AddOne:
       if (store.addOne()) {
         ble.notifyCount(store.count());
@@ -66,15 +96,23 @@ static void handleGesture(GestureEvent event, uint32_t nowMs) {
       syncAtMax();
       noteShown(nowMs);
       break;
+
     case GestureEvent::OpenPairing:
-      // The radio window and the blue blink land with advertising.
       store.commit();
+      ble.openPairingWindow();
+      display.startPairingBlink();
       break;
+
     case GestureEvent::CancelPairing:
+      ble.closePairingWindow();
+      display.stopPairingBlink();
       gestures.endPairing();
       break;
+
     case GestureEvent::ForgetBonds:
+      ble.clearBonds();
       break;
+
     case GestureEvent::None:
       break;
   }
@@ -87,7 +125,11 @@ void setup() {
   syncAtMax();
 
   ble.onMaxWrite(handleMaxWrite);
-  ble.begin(MODEL_NAME);
+  ble.onNameWrite(handleNameWrite);
+  ble.onLocate(handleLocate);
+  ble.onPairingClosed(handlePairingClosed);
+  ble.begin(store.count(), store.maximum(), store.name(), store.nameLength());
+
   power.begin();
 }
 
