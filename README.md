@@ -2,7 +2,7 @@
 
 A small rechargeable counter. One button, eight LEDs, and a number from 0 to a per-device maximum that survives power loss. A phone app talks to any number of these devices over Bluetooth Low Energy and can read each count or set each device's maximum.
 
-The behavior, wiring, radio contract, and power policy are specified. The firmware builds around those contracts. Gesture recognition, the LED pattern, flash storage, BLE, and sleep are tracked as GitHub issues and are not implemented yet. The phone app in [app/](app/) lists the counters that phone has bonded and edits each name and max.
+The behavior, wiring, radio contract, and power policy are specified. The firmware implements those contracts. The phone app in [app/](app/) lists the counters that phone has bonded and edits each name and max.
 
 ## What the button does
 
@@ -14,6 +14,8 @@ The behavior, wiring, radio contract, and power policy are specified. The firmwa
 | Hold on after the count reaches max | Three more seconds opens pairing. All eight lamps blink blue, and a phone can bond. |
 
 The number stays inside 0 and the device's max. Max is an integer from 1 to 16, stored on the device, defaulting to 2, and changed from the phone. The full timing and edge cases are in [docs/behavior.md](docs/behavior.md).
+
+The same gestures work from an external button on a two-pin socket. It is wired in parallel with the on-board button, so the device still has one input.
 
 The eight RGB lamps count one step at a time. The first pass is red: one lamp is 1, eight lamps is 8. The second pass turns those lamps green, so 9 is one green lamp and seven red, and 16 is all green. Each reading starts with a short blue flash of all eight, so a count of zero is visible and then goes dark. Blue is also the pairing blink and the locate chase.
 
@@ -44,31 +46,27 @@ The phone is a central. Each device is its own peripheral with its own count, ma
 | [firmware/](firmware/) | PlatformIO project for the nRF52832 module |
 | [app/](app/) | Flutter app for bonded counters |
 
-The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). Firmware loads over USB-C through a CH340C that is only powered while the cable is plugged in. JLCPCB Economic assembly places one side. The USB-C socket and the button are hand soldered. The machine-placed extended parts are the module, the charger, the CH340C, and the eight addressable lamps (one feeder).
+The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). Firmware loads over USB-C through a CH340C that is only powered while the cable is plugged in. JLCPCB Economic assembly places one side. The USB-C socket, the button, the cell socket, and the external-button socket are hand soldered. The machine-placed extended parts are the module, the charger, the CH340C, and the eight addressable lamps (one feeder).
 
 ## Firmware status
 
 | Module | What is in the tree |
 | --- | --- |
 | `main.cpp` | Connects gestures, storage, LEDs, BLE, and sleep |
-| `counter_store` | RAM clamping for add, subtract, and set-max |
-| `button_gestures` | Button pin is an input pull-up. Recognition is unimplemented |
-| `led_display` | Count lamps are driven off. The red-then-green pattern is unimplemented |
-| `ble_link` | Callback slot only. Radio is unimplemented |
-| `power_mgmt` | Yields the CPU. Sleep is unimplemented |
+| `counter_store` | RAM clamping plus `/counter.bin` load and commit |
+| `button_gestures` | View, subtract chain, hold-to-add, hold-at-max pairing |
+| `led_display` | Blue ACK flash, red-then-green count, pairing blink, locate |
+| `ble_link` | Advertising, GATT, bonding window, battery sample |
+| `power_mgmt` | System-on idle; UART pins float while USB is unplugged |
 
-Flashing this tree produces a quiet board: LEDs off, button ignored, no advertising. Build instructions are in [firmware/README.md](firmware/README.md).
+Build instructions are in [firmware/README.md](firmware/README.md). Idle current still needs measuring on the assembled board for [#6](https://github.com/FixerSchis/charge-counter/issues/6).
 
 ## Work remaining
 
 | Issue | Feature |
 | --- | --- |
 | [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Custom PCB laid out for cheap SMT assembly |
-| [#2](https://github.com/FixerSchis/charge-counter/issues/2) | Single-press view, double-press subtract, hold-to-add |
-| [#3](https://github.com/FixerSchis/charge-counter/issues/3) | Count and max kept across power loss |
-| [#4](https://github.com/FixerSchis/charge-counter/issues/4) | Red-then-green count on the eight RGB lamps |
-| [#5](https://github.com/FixerSchis/charge-counter/issues/5) | BLE advertising, count, max, and battery |
-| [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Sleep, and a measured battery life |
+| [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Measured battery life on the finished board |
 | [#7](https://github.com/FixerSchis/charge-counter/issues/7) | Phone app that monitors several devices |
 | [#8](https://github.com/FixerSchis/charge-counter/issues/8) | Per-device max edited from the phone |
 

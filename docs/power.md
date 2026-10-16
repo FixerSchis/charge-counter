@@ -14,7 +14,7 @@ Use system-on sleep with the SoftDevice still scheduled. System OFF stops advert
 
 P0.14 stays low while the divider is not being sampled, so the two 1 MΩ resistors are not a permanent load. While P0.17 reads low (USB unplugged), P0.12 and P0.15 stay disconnected inputs with no pull, so the unpowered CH340 cannot draw from the cell. Debug logging stays out of the field firmware. The serial bootloader may use that UART, because it only runs while USB is plugged in.
 
-Charge current is the PROG resistor, about 110 mA with 10 kΩ. Firmware does not change it.
+Charge current is the PROG resistor, about 50 mA with 22 kΩ, which is 0.5C for the 100 mAh cell. Firmware does not change it.
 
 ## What to measure
 

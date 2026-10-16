@@ -1,6 +1,6 @@
 # Hardware
 
-The product is a custom two-layer PCB. Most of it is assembled on one side by a budget SMT service. The USB-C socket and the button are soldered by hand after the boards come back, so those two extended parts never pay a feeder fee.
+The product is a custom two-layer PCB. Most of it is assembled on one side by a budget SMT service. The USB-C socket, the button, the cell socket, and the external-button socket are soldered by hand after the boards come back, so those extended parts never pay a feeder fee.
 
 The copper drawings are not in the repository yet. Pin numbers below are datasheet numbers. Pad positions come from the LCSC footprint.
 
@@ -13,11 +13,12 @@ Library types below were read from JLCPCB part pages on 11 Oct 2026. JLCPCB move
 | Who places it | Parts |
 | --- | --- |
 | The fab, from the Machine rows in [hardware/bom.csv](../hardware/bom.csv) | Module, charger, USB-serial chip, LDO, LEDs, passives, divider MOSFET |
-| Hand, after the boards arrive | USB-C socket, tactile button, and the lithium cell |
+| Hand, after the boards arrive | USB-C socket, tactile button, JST PH cell socket, and JST JWPF external-button socket |
+| Bought separately, then plugged in | 100 mAh protected LiPo, Adafruit 1570 or the same pouch |
 
-The button is four SMT pads. Flux and a normal iron are enough.
+The button is four SMT pads. Flux and a normal iron are enough. The external-button socket is a through-hole header; solder the two pins and leave the plastic locating peg unconnected.
 
-The USB-C socket is [TYPE-C-31-M-12](https://jlcpcb.com/partdetail/Korean_HropartsElec-TYPE_C_31_M12/C165948) (C165948), a right-angle part whose signal pins stick out behind the shell. Drag-solder those pins with flux, then wick any bridges. The shell tabs need a bit more heat. A mid-mount socket with hidden pins would be a poor hand-solder, so the footprint stays this one. Leave both parts off the fab BOM. Ordering them as "do not place" still risks a feeder fee; buy them separately and solder them yourself.
+The USB-C socket is [TYPE-C-31-M-12](https://jlcpcb.com/partdetail/Korean_HropartsElec-TYPE_C_31_M12/C165948) (C165948), a right-angle part whose signal pins stick out behind the shell. Drag-solder those pins with flux, then wick any bridges. The shell tabs need a bit more heat. A mid-mount socket with hidden pins would be a poor hand-solder, so the footprint stays this one. Leave the USB-C socket, the button, the JST cell socket, and the JWPF socket off the fab BOM. Ordering them as "do not place" still risks a feeder fee; buy them separately and solder them yourself.
 
 Rules that keep the fab order on the cheap tier:
 
@@ -34,9 +35,9 @@ The machine-placed extended lines are the nRF52832 module, the TP4056, and the C
 
 The nRF52832 has no USB device. A [CH340C](https://jlcpcb.com/partdetail/WCH_Jiangsu_Qin_Heng-CH340C/C84681) (C84681) sits between the USB-C data pins and a UART on the module, so a cable is enough to load firmware. The CH340C needs no crystal. D+ and D− go straight to the socket, A-side tied to B-side.
 
-The chip's TX pin idles high, close to its own supply. A module pin must stay at or below VDD + 0.3 V, so the CH340 is not powered from 5 V. A second XC6206, the same basic part as the module regulator, takes VBUS down to 3.3 V and feeds CH340 VCC. V3 is tied to that same 3.3 V pin, which is the datasheet connection for a 3.3 V supply. 10 µF sits on the regulator output and 100 nF sits at the CH340. Unplugging the cable removes VBUS, so this regulator and the CH340 both go off. The listed CH340 quiescent current is about 50 µA, and it is not drawn from the cell.
+The chip's TX pin idles high, close to its own supply. A module pin must stay at or below VDD + 0.3 V, so the CH340 is not powered from 5 V. A second XC6206, the same basic part as the module regulator, takes VBUS down to 3.3 V and feeds CH340 VCC. V3 is tied to that same 3.3 V pin, which is the datasheet connection for a 3.3 V supply. One 10 µF sits on the regulator output, and the CH340 sits against that capacitor. Unplugging the cable removes VBUS, so this regulator and the CH340 both go off. The listed CH340 quiescent current is about 50 µA, and it is not drawn from the cell.
 
-DTR# is CH340 pin 13. It goes through 100 nF to module P0.21, which has a 10 kΩ pull-up to the module 3.3 V rail. The uploader pulls DTR# low to reset into the serial bootloader. The capacitor blocks DC, and the pull-up holds reset released while the CH340 is unpowered. Pin 8 (OUT#) stays open. A pulldown there would turn it into a second DTR on some lots. Pin 7 stays open. Pin 15 (R232) stays open so its internal pulldown does not invert RXD.
+DTR# is CH340 pin 13. It goes through 100 nF to module P0.21, which has a 10 kΩ pull-up to the module 3.3 V rail. The uploader pulls DTR# low to reset into the serial bootloader. The capacitor blocks DC, and the pull-up holds reset released while the CH340 is unpowered. That capacitor is in series, so it can sit anywhere on the trace. Pin 8 (OUT#) stays open. A pulldown there would turn it into a second DTR on some lots. Pin 7 stays open. Pin 15 (R232) stays open so its internal pulldown does not invert RXD.
 
 | Net | Module | CH340C |
 | --- | --- | --- |
@@ -70,20 +71,22 @@ USB-C VBUS (5 V)
   CHRG  -- LED -- 1.5 kΩ -- VBUS     charge lamp, off when USB is unplugged
   VBUS -- 10 kΩ -- P0.17 -- 10 kΩ -- GND
 
-U3 3.3 V -- CH340C VCC and V3, with 10 µF and 100 nF to GND
+U3 3.3 V -- CH340C VCC and V3, with 10 µF to GND
 
 TP4056 BAT -- cell pad BAT+
            -- XC6206 U2 input
-U2 3.3 V -- module VCC, with 10 µF and 100 nF to GND
+U2 3.3 V -- module VCC, with 10 µF to GND
 
 BAT+ -- 1 MΩ -- AIN -- 1 MΩ -- 2N7002 drain
 2N7002 source -- GND
 2N7002 gate  -- P0.14
 ```
 
-TP4056 (C16581) charges one cell to 4.2 V. With USB removed, the datasheet battery drain is under 3 µA. PROG is 10 kΩ to ground. The charge-current formula in the TOPPOWER datasheet is `IBAT = (VPROG / RPROG) × 1100` with VPROG at 1 V in constant current, so 10 kΩ is about 110 mA. Use a protected cell of at least 220 mAh so that stays under 0.5C. TEMP is tied to ground, which the datasheet says disables the thermistor input. CE is tied to VCC. The exposed pad is soldered to ground. STDBY is left open so there is no second charge LED.
+TP4056 (C16581) charges one cell to 4.2 V. With USB removed, the datasheet battery drain is under 3 µA. PROG is 22 kΩ to ground. The charge-current formula in the TOPPOWER datasheet is `IBAT = (VPROG / RPROG) × 1100` with VPROG at 1 V in constant current, so 22 kΩ is about 50 mA. That is 0.5C for the 100 mAh cell. TEMP is tied to ground, which the datasheet says disables the thermistor input. CE is tied to VCC. The exposed pad is soldered to ground. STDBY is left open so there is no second charge LED.
 
 XC6206P332MR (C5446) is a basic-library 3.3 V LDO with about 1 µA quiescent current. Two of them are fitted. U2 feeds the module from the cell. U3 feeds the CH340 from VBUS and is off when the cable is unplugged. On U2, when the cell sags near 3.3 V the regulator drops out and the module keeps running on the falling cell voltage, down to the module's 1.8 V minimum. The count lamps need the cell itself at 3.7 V or more, so they go dark before the module does. SOT-23 pin order, top view: pin 1 ground, pin 2 output, pin 3 input.
+
+Five 10 µF ceramics are the whole bulk set: TP4056 VCC, TP4056 BAT, each LDO output, and LED_VDD. A parallel 100 nF is left off those nets. U3's input sits against the VBUS capacitor, and U2's input sits against the BAT capacitor, so neither LDO has an input capacitor of its own. U2 sits against module VCC, so its output capacitor is the module capacitor. U3 sits against the CH340, so its output capacitor is the CH340 bypass. The module already bypasses the nRF die.
 
 The charge LED is a red KT-0603R on VBUS, so it cannot drain the cell. It is not one of the eight count lamps.
 
@@ -97,9 +100,9 @@ Each lamp has one data input and one data output. P0.02 drives the first lamp th
 
 The chain does not run from the 3.3 V rail. Its supply is the cell, switched. Left powered, each lamp draws about 0.5 mA while dark, and eight of them would dominate the idle budget. A high-side switch keeps that current off except during a reading:
 
-```
+```text
 BAT+ -- AO3401A source
-AO3401A drain -- LED_VDD -- lamp VDD pins, and 10 µF plus 100 nF to ground at the chain
+AO3401A drain -- LED_VDD -- lamp VDD pins, with 10 µF to ground where the rail feeds the row
 AO3401A gate -- 1 MΩ -- BAT+
 AO3401A gate -- 2N7002 drain
 2N7002 source -- GND
@@ -112,21 +115,23 @@ The lamp supply range is 3.7 V to 5.3 V, so the chain is powered from the cell a
 
 Firmware holds P0.02 low whenever the chain is off, including at boot, so the data pin cannot feed an unpowered lamp. Turn the switch on, wait for the rail, send one frame, and drop the data pin low again before turning the switch off. Frames are sent with PWM and DMA, or another method a SoftDevice interrupt cannot split. A bit-banged frame will glitch when the radio runs. Color values stay near `LED_LEVEL` (20 out of 255) so eight lamps do not pull the cell at full pixel current.
 
-A 100 nF capacitor sits on VDD at each lamp. One 10 µF sits on LED_VDD.
+One 10 µF sits on LED_VDD at the MOSFET end of the row. One 100 nF sits on VDD at the last lamp. The other lamps have no local capacitor. The row is short, and the lamps run near `LED_LEVEL` (20 out of 255). A long chain, or these lamps at full white, would want the per-lamp parts back.
 
 P0.09 and P0.10 stay free. They are the NFC pins, and using them as GPIO needs a UICR setting the firmware does not rely on.
 
 The button is the hand-soldered tactile switch from P0.13 to ground. The firmware enables the internal pull-up.
 
+An external button uses the same pin. J4 is a JST JWPF header, [B02B-JWPF-SK-R(LF)(SN)](https://jlcpcb.com/partdetail/JST-B02B_JWPF_SK_R_LF_SN/C5305323) (C5305323), hand soldered and left off the fab order. Pin 1 joins P0.13. Pin 2 joins ground. A normally open switch on the cable shorts those two pins, in parallel with the on-board switch, so either one is a press and holding both is still just a press. The header is top entry, about 8.1 mm across and 16.6 mm tall, with a silicon seal that is IPX7 while the plug is mated. The third hole is a plastic peg, not a contact. This housing does not accept the battery's JST PH plug. The mating plug is 02R-JWPF-VSLE-S with two SWPR-001T-P025 contacts, for AWG 26 to 22 wire. With the plug removed the shroud is open; this series has no dust cap.
+
 The charge LED is not a ninth count lamp. A reading of zero is the blue opening flash described in [docs/behavior.md](behavior.md).
 
 ## Cell
 
-A protected single-cell Li-ion or LiPo, soldered to BAT+ and BAT− pads after assembly. Silkscreen the polarity. The cell is not part of the fab order.
+Adafruit 1570, or the same pouch: a protected 100 mAh LiPo, about 12 × 31 × 3.8 mm, with a JST PH 2.0 mm plug already fitted. It plugs into a hand-soldered S2B-PH-SM4-TB socket. It is not part of the fab order. Silkscreen BAT+ on the socket pin that meets the red wire, and check that wire before the first plug-in. Some other sellers reverse the PH plug.
 
 ## Bring-up
 
-1. P0.13 reads low while the button is held and high when released.
+1. P0.13 reads low while either button is held and high when both are released.
 2. With P0.16 high and a cell above 3.7 V, a frame on P0.02 lights the chain in order. With P0.16 low, the chain is dark and is not a load on the cell.
 3. With USB plugged in and a cell on the pads, the charge LED follows CHRG and the cell voltage rises toward 4.2 V.
 4. Module VCC stays at or below 3.6 V while the cell is at 4.2 V.

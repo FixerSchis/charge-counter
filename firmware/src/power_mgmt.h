@@ -1,7 +1,6 @@
 #pragma once
 
-// Sleep between button and radio events. The power policy is in docs/power.md.
-// idle() currently just yields; it does not sleep the radio.
+// System-on sleep between button and SoftDevice events (docs/power.md).
 class PowerMgmt {
  public:
   void begin();
