@@ -2,7 +2,7 @@
 
 A small rechargeable counter. One button, eight LEDs, and a number from 0 to a per-device maximum that survives power loss. A phone app talks to any number of these devices over Bluetooth Low Energy and can read each count or set each device's maximum.
 
-The behavior, wiring, radio contract, and power policy are specified. The firmware implements gestures, storage, the lamp pattern, and BLE. Sleep and the phone app are still open.
+The behavior, wiring, radio contract, and power policy are specified. The firmware implements those contracts. The phone app is not in the tree yet.
 
 ## What the button does
 
@@ -55,16 +55,16 @@ The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF5283
 | `button_gestures` | View, subtract chain, hold-to-add, hold-at-max pairing |
 | `led_display` | Blue ACK flash, red-then-green count, pairing blink, locate |
 | `ble_link` | Advertising, GATT, bonding window, battery sample |
-| `power_mgmt` | Yields the CPU. Sleep is unimplemented |
+| `power_mgmt` | System-on idle; UART pins float while USB is unplugged |
 
-Build instructions are in [firmware/README.md](firmware/README.md). Sleep is still a short delay.
+Build instructions are in [firmware/README.md](firmware/README.md). Idle current still needs measuring on the assembled board for [#6](https://github.com/FixerSchis/charge-counter/issues/6).
 
 ## Work remaining
 
 | Issue | Feature |
 | --- | --- |
 | [#1](https://github.com/FixerSchis/charge-counter/issues/1) | Custom PCB laid out for cheap SMT assembly |
-| [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Sleep, and a measured battery life |
+| [#6](https://github.com/FixerSchis/charge-counter/issues/6) | Measured battery life on the finished board |
 | [#7](https://github.com/FixerSchis/charge-counter/issues/7) | Phone app that monitors several devices |
 | [#8](https://github.com/FixerSchis/charge-counter/issues/8) | Per-device max edited from the phone |
 
