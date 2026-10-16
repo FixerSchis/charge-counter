@@ -15,6 +15,8 @@ The behavior, wiring, radio contract, and power policy are specified. The firmwa
 
 The number stays inside 0 and the device's max. Max is an integer from 1 to 16, stored on the device, defaulting to 2, and changed from the phone. The full timing and edge cases are in [docs/behavior.md](docs/behavior.md).
 
+The same gestures work from an external button on a two-pin socket. It is wired in parallel with the on-board button, so the device still has one input.
+
 The eight RGB lamps count one step at a time. The first pass is red: one lamp is 1, eight lamps is 8. The second pass turns those lamps green, so 9 is one green lamp and seven red, and 16 is all green. Each reading starts with a short blue flash of all eight, so a count of zero is visible and then goes dark. Blue is also the pairing blink and the locate chase.
 
 ## How the pieces fit
@@ -44,7 +46,7 @@ The phone is a central. Each device is its own peripheral with its own count, ma
 | [firmware/](firmware/) | PlatformIO project for the nRF52832 module |
 | [app/](app/) | Phone app contract |
 
-The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). Firmware loads over USB-C through a CH340C that is only powered while the cable is plugged in. JLCPCB Economic assembly places one side. The USB-C socket and the button are hand soldered. The machine-placed extended parts are the module, the charger, the CH340C, and the eight addressable lamps (one feeder).
+The board is a custom two-layer PCB built around an Ebyte E73-2G4M04S1B (nRF52832). Firmware loads over USB-C through a CH340C that is only powered while the cable is plugged in. JLCPCB Economic assembly places one side. The USB-C socket, the button, the cell socket, and the external-button socket are hand soldered. The machine-placed extended parts are the module, the charger, the CH340C, and the eight addressable lamps (one feeder).
 
 ## Firmware status
 

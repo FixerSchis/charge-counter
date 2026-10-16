@@ -10,9 +10,15 @@ Machine,8,C42417600,WS2812C-2020-V1/W,Addressable RGB,Extended,Eight count lamps
 Machine,1,C22843,0603WAF1501T5E,1.5 kΩ,Basic,Charge LED series resistor
 Machine,1,C23179,0603WAF4700T5E,470 Ω,Basic,Series resistor into the first lamp data pin
 Machine,2,C23186,0603WAF5101T5E,5.1 kΩ,Basic,USB-C CC pulldowns
-Machine,4,C25804,0603WAF1002T5E,10 kΩ,Basic,PROG about 110 mA; reset pull-up; VBUS divider
+Machine,3,C25804,0603WAF1002T5E,10 kΩ,Basic,Reset pull-up; VBUS divider
+Machine,1,C31850,0603WAF2202T5E,22 kΩ,Basic,PROG about 50 mA, for the 100 mAh cell
 Machine,3,C22935,0603WAF1004T5E,1 MΩ,Basic,Battery divider, and the lamp-switch gate pull-up
-Machine,6,C19702,CL10A106KP8NNNC,10 µF 10 V,Basic,VBUS, BAT, both LDO outputs, module VCC, lamp rail
-Machine,14,C14663,CC0603KRX7R9BB104,100 nF,Basic,VBUS, BAT, both LDO outputs, module VCC, DTR-to-reset, one at each lamp
+Machine,5,C19702,CL10A106KP8NNNC,10 µF 10 V,Basic,TP4056 VCC, TP4056 BAT, U2 output (also module VCC), U3 output (also CH340), lamp rail at the MOSFET
+Machine,2,C14663,CC0603KRX7R9BB104,100 nF,Basic,DTR-to-reset anywhere on that trace, and VDD of the last count lamp
 Hand,1,C165948,TYPE-C-31-M-12,USB-C receptacle,Extended,Charge and programming. Not placed by the fab
 Hand,1,C10852,4x4x1.7 mm tactile,SPST,Extended,User button. Not placed by the fab
+Hand,1,C295747,S2B-PH-SM4-TB(LF)(SN),JST PH 2.0 socket,Extended,Cell connector. Not placed by the fab
+Hand,1,C5305323,B02B-JWPF-SK-R(LF)(SN),JST JWPF 2-pin,Extended,External button socket. Same signal as the on-board button. Not placed by the fab
+Buy,1,,02R-JWPF-VSLE-S,JWPF 2-pin plug,,Mating housing for the external button. Not a fab part
+Buy,2,,SWPR-001T-P025,JWPF contact,,One per wire on the external button, AWG 26 to 22. Not a fab part
+Buy,1,,Adafruit 1570,100 mAh LiPo,Protected,12 x 31 x 3.8 mm pouch. JST PH plug fitted. Not a fab part
